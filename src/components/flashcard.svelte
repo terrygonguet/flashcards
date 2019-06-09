@@ -26,6 +26,17 @@
       answered = true;
     }
   }
+
+  function handleKeydown(e) {
+    if (answered) {
+      if (e.key == "Enter") answer(true)
+      else if (e.key == "Backspace") answer(false)
+    } else handleClick()
+  }
+
+  function answer(value)  {
+    dispatch("answer", value)
+  }
 </script>
 
 <style>
@@ -55,14 +66,16 @@
   }
 </style>
 
+<svelte:window on:keydown={handleKeydown}/>
+
 <div class="flashcard" on:click={handleClick}>
   {#if !answered}
     <Cardfigure data={first} />
   {:else}
     <Cardfigure data={second} />
     <div>
-      <button class="right button">Juste</button>
-      <button class="wrong button">Faux</button>
+      <button class="right button" on:click={e => answer(true)}>Juste</button>
+      <button class="wrong button" on:click={e => answer(false)}>Faux</button>
     </div>
   {/if}
 </div>

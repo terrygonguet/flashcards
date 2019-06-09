@@ -1,5 +1,6 @@
 <script>
-  import { lists, directories, selectedLists, showNotion } from "../stores";
+  import { lists, directories, selectedLists } from "../stores";
+  import ToggleNotion from "../components/toggleNotion.svelte";
 
   $: tree = $directories.map(dir => ({
     ...dir,
@@ -18,7 +19,8 @@
       if (l.directory == id) {
         if (checked && $selectedLists.indexOf(l.id) == -1)
           $selectedLists = [...$selectedLists, l.id];
-        else $selectedLists = $selectedLists.filter(sl => sl != l.id);
+        else if (!checked)
+          $selectedLists = $selectedLists.filter(sl => sl != l.id);
       }
     });
   }
@@ -53,10 +55,8 @@
     border-radius: 0.25rem;
   }
 
-  .togglenotion {
+  .separator {
     margin: auto 0 0 0;
-    padding: 0.5rem;
-    text-align: center;
   }
 
   .button {
@@ -69,7 +69,7 @@
       position: relative;
       margin: auto;
     }
-    .togglenotion {
+    .separator {
       margin: 0;
     }
   }
@@ -96,7 +96,7 @@
               type="checkbox"
               bind:group={$selectedLists}
               value={list.id} />
-             {list.label} - {list.nbCards} cartes
+             {list.label} - {list.nbCards || 0} cartes
           </label>
         </li>
       {:else}
@@ -106,17 +106,8 @@
   {:else}
     <p>Pas de dossier</p>
   {/each}
-  <div class="togglenotion">
-    <label>
-      Notion
-      <input type="radio" bind:group={$showNotion} value={true} />
-    </label>
-    |
-    <label>
-      <input type="radio" bind:group={$showNotion} value={false} />
-      Explication
-    </label>
-  </div>
+  <div class="separator" />
+  <ToggleNotion />
   <a href="learn" class:disabled={$selectedLists.length == 0} class="button">
     GO
   </a>

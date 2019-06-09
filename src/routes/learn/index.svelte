@@ -10,7 +10,6 @@
   });
 
   let i = 0;
-  let answered = false;
   let displayCard = true;
   let allCards;
 
@@ -25,17 +24,13 @@
   }
 
   function handleKeydown(e) {
-    if (answered && (e.key == "Enter" || e.key == "Tab")) {
-      e.preventDefault();
-      next();
-    } else if (e.key == "Escape") {
+    if (e.key == "Escape") {
       goto(process.env.BASE_PATH);
     }
   }
 
   function next() {
     i = (i + 1) % allCards.length;
-    answered = false;
   }
 </script>
 
@@ -73,8 +68,7 @@
       <Flashcard
         card={allCards[i]}
         startOnNotion={$showNotion}
-        on:answer={e => (answered = true)}
-        on:click={e => answered && next()} />
+        on:answer={e => next()} />
     {/if}
   {:else}
     <p>Pas de cartes sélectionnées</p>
