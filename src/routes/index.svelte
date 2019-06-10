@@ -1,5 +1,5 @@
 <script>
-  import { lists, directories, selectedLists } from "../stores";
+  import { lists, directories, selectedLists, cards } from "../stores";
   import ToggleNotion from "../components/toggleNotion.svelte";
 
   $: tree = $directories.map(dir => ({
@@ -11,6 +11,16 @@
     tree.map(dir => {
       let allChecked = dir.lists.every(l => $selectedLists.includes(l.id));
       return [dir.id, allChecked];
+    })
+  );
+
+  $: nbCards = Object.fromEntries(
+    $lists.map(l => {
+      let nb = $cards.reduce(
+        (acc, cur) => (cur.list == l.id ? acc + 1 : acc),
+        0
+      );
+      return [l.id, nb];
     })
   );
 
@@ -96,7 +106,7 @@
               type="checkbox"
               bind:group={$selectedLists}
               value={list.id} />
-             {list.label} - {list.nbCards || 0} cartes
+             {list.label} - {nbCards[list.id]} cartes
           </label>
         </li>
       {:else}

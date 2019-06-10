@@ -1,5 +1,6 @@
-import { readable, writable } from "svelte/store"
+import { readable, writable } from "svelte/store";
 
-export const selectedLists = writable([])
-export const showNotion = writable(true)
-export { cards, directories, lists } from "./db"
+export const selectedLists = writable([]);
+export const showNotion = writable(true);
+export const selectedCard = writable(null);
+export { cards, directories, lists } from "./db";

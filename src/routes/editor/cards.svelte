@@ -1,0 +1,65 @@
+<script>
+  import { cards, selectedCard } from "../../stores";
+  import db from "../../db";
+  import { goto } from "@sapper/app";
+
+  let href = "editor/card";
+
+  function add(e) {
+    db.card.add({ notion: "", explication: "" }).then(id => {
+      let card = $cards.find(c => c.id == id);
+      $selectedCard = card;
+      goto(href);
+    });
+  }
+</script>
+
+<style>
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-auto-rows: max-content;
+    grid-gap: 0.5rem;
+    width: 100%;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card img {
+    display: block;
+    border-radius: 0.25rem;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .add {
+    border: 1px solid grey;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    text-decoration: none;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+</style>
+
+<div class="container">
+  {#each $cards as card}
+    <a
+      {href}
+      on:click={e => ($selectedCard = card)}
+      class:card={card.image}
+      class:add={!card.image}>
+      {#if card.image}
+        <img src={card.image} alt={card.notion} />
+      {:else}{card.notion}{/if}
+    </a>
+  {/each}
+  <a {href} class="add" on:click={add}>Ajouter une carte</a>
+</div>

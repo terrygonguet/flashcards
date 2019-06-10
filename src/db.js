@@ -54,17 +54,6 @@ db.on("populate", async () => {
   ]);
 });
 
-function updateListCardNumber(pk, obj, tx) {
-  if (obj.list) {
-    this.onsuccess = async () => {
-      let nbCards = await db.card.where({ list: obj.list }).count();
-      await db.list.update(obj.list, { nbCards });
-    };
-  }
-}
-db.card.hook("creating", updateListCardNumber);
-db.card.hook("deleting", updateListCardNumber);
-
 function makeStore(table) {
   return readable([], set => {
     function hook(pk, obj, tx) {

@@ -5,6 +5,10 @@
     justify-content: center;
     align-items: center;
   }
+
+  .button {
+    margin: 0.5rem;
+  }
 </style>
 
 <div>

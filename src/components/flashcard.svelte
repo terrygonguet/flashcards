@@ -29,13 +29,13 @@
 
   function handleKeydown(e) {
     if (answered) {
-      if (e.key == "Enter") answer(true)
-      else if (e.key == "Backspace") answer(false)
-    } else handleClick()
+      if (e.key == "Enter") answer(true);
+      else if (e.key == "Backspace") answer(false);
+    } else handleClick();
   }
 
-  function answer(value)  {
-    dispatch("answer", value)
+  function answer(value) {
+    dispatch("answer", value);
   }
 </script>
 
@@ -56,17 +56,19 @@
   }
 
   .right {
+    margin: 0.5rem;
     border-color: green;
     background-color: forestgreen;
   }
 
   .wrong {
+    margin: 0.5rem;
     border-color: red;
     background-color: crimson;
   }
 </style>
 
-<svelte:window on:keydown={handleKeydown}/>
+<svelte:window on:keydown={handleKeydown} />
 
 <div class="flashcard" on:click={handleClick}>
   {#if !answered}
