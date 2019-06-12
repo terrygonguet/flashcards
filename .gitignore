@@ -1,2 +1,4 @@
-__sapper__/
-node_modules/
+__sapper__
+node_modules
+src/node_modules
+cypress/screenshots

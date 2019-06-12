@@ -120,14 +120,6 @@
     value={card.explication}
     on:change={e => update('explication', e.target.value)}
     placeholder="Explication" />
-  <select
-    on:change={e => update('list', parseInt(e.target.value))}
-    value={card.list}>
-    <option value={undefined}>-</option>
-    {#each $lists as list}
-      <option value={list.id}>{list.label}</option>
-    {/each}
-  </select>
   <div class="btncontainer">
     <a href="editor/cards" class="button delete" on:click={remove}>Supprimer</a>
     <a href="editor/cards" class="button">Confirmer</a>

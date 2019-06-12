@@ -5,8 +5,7 @@
   import { onMount, tick } from "svelte";
 
   onMount(() => {
-    if (!$selectedLists.length)
-      goto(process.env.BASE_PATH, { replaceState: true });
+    if (!$selectedLists.length) goto("/", { replaceState: true });
   });
 
   let i = 0;
@@ -25,7 +24,7 @@
 
   function handleKeydown(e) {
     if (e.key == "Escape") {
-      goto(process.env.BASE_PATH);
+      goto("/");
     }
   }
 
@@ -74,5 +73,5 @@
   {:else}
     <p>Pas de cartes sélectionnées</p>
   {/if}
-  <a class="button" href={process.env.BASE_PATH}>Retour</a>
+  <a class="button" href="/">Retour</a>
 </div>

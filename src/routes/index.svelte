@@ -1,6 +1,11 @@
 <script>
   import { lists, directories, selectedLists, cards } from "../stores";
   import ToggleNotion from "../components/toggleNotion.svelte";
+  import { onMount } from "svelte";
+
+  onMount(() => {
+    $selectedLists = [];
+  });
 
   $: tree = $directories.map(dir => ({
     ...dir,

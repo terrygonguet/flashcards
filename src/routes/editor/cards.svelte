@@ -1,16 +1,25 @@
 <script>
-  import { cards, selectedCard } from "../../stores";
+  import { cards, selectedCard, selectedList } from "../../stores";
   import db from "../../db";
   import { goto } from "@sapper/app";
+  import { onMount } from "svelte";
 
-  let href = "editor/card";
+  onMount(() => {
+    if (!$selectedList) goto("editor", { replaceState: true });
+  });
+
+  $: cardsInList = $selectedList
+    ? $cards.filter(c => c.list == $selectedList.id)
+    : [];
 
   function add(e) {
-    db.card.add({ notion: "", explication: "" }).then(id => {
-      let card = $cards.find(c => c.id == id);
-      $selectedCard = card;
-      goto(href);
-    });
+    db.card
+      .add({ notion: "", explication: "", list: $selectedList.id })
+      .then(id => {
+        let card = $cards.find(c => c.id == id);
+        $selectedCard = card;
+        goto(href);
+      });
   }
 </script>
 
@@ -50,9 +59,9 @@
 </style>
 
 <div class="container">
-  {#each $cards as card}
+  {#each cardsInList as card}
     <a
-      {href}
+      href="editor/card"
       on:click={e => ($selectedCard = card)}
       class:card={card.image}
       class:add={!card.image}>
@@ -61,5 +70,5 @@
       {:else}{card.notion}{/if}
     </a>
   {/each}
-  <a {href} class="add" on:click={add}>Ajouter une carte</a>
+  <a href="editor/card" class="add" on:click={add}>Ajouter une carte</a>
 </div>

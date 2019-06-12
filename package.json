@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "flashme",
+  "description": "Yet another flashcards web app.",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev -p 8080",

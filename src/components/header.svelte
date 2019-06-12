@@ -23,7 +23,7 @@
 </style>
 
 <header>
-  <a href={process.env.BASE_PATH}>Flash Me</a>
+  <a href="/">Flash Me</a>
   <nav>
     <ul>
       <li>
