@@ -24,7 +24,7 @@
 
   function handleKeydown(e) {
     if (e.key == "Escape") {
-      goto("/");
+      goto(".");
     }
   }
 
@@ -73,5 +73,5 @@
   {:else}
     <p>Pas de cartes sélectionnées</p>
   {/if}
-  <a class="button" href="/">Retour</a>
+  <a class="button" href=".">Retour</a>
 </div>

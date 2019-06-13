@@ -1,78 +1,43 @@
-import Dexie from "dexie";
-import { readable } from "svelte/store";
-import images from "./_images";
+import Dexie from "dexie"
+import { readable } from "svelte/store"
 
-const db = new Dexie("flashMe");
+const db = new Dexie("flashMe")
 
 db.version(1).stores({
   directory: "++id, label",
   list: "++id, directory, label, &[directory+label]",
-  card: "++id, list"
-});
+  card: "++id, list",
+})
 
-db.on("populate", async () => {
-  let directory = await db.directory.add({ label: "Anglais" });
-  let list1 = await db.list.add({ directory, label: "Weather" });
-  let list2 = await db.list.add({ directory, label: "Vehicules" });
-  await Promise.all([
-    db.card.add({
-      list: list1,
-      notion: "Cloudy",
-      explication: "Nuageux",
-      image: images.cloudy
-    }),
-    db.card.add({
-      list: list1,
-      notion: "Sunny",
-      explication: "Ensoleillé",
-      image: images.sunny
-    }),
-    db.card.add({
-      list: list1,
-      notion: "Rainy",
-      explication: "Pluvieux",
-      image: images.rainy
-    }),
-    db.card.add({
-      list: list2,
-      notion: "Bus",
-      explication: "Bus",
-      image: images.bus
-    }),
-    db.card.add({
-      list: list2,
-      notion: "Car",
-      explication: "Voiture",
-      image: images.car
-    }),
-    db.card.add({
-      list: list2,
-      notion: "Bike",
-      explication: "Vélo",
-      image: images.bike
-    })
-  ]);
-});
+// only import example data the first time cause it's expensive
+db.on("ready", async () => {
+  let count = await db.directory.count()
+  if (count) return
+
+  import("./populate")
+    .then(m => m.default())
+    .catch(console.error)
+})
 
 function makeStore(table) {
   return readable([], set => {
     function hook(pk, obj, tx) {
-      this.onsuccess = () => db[table].toArray().then(set);
+      this.onsuccess = () => db[table].toArray().then(set)
     }
-    db[table].hook("creating", hook);
-    db[table].hook("updating", hook);
-    db[table].hook("deleting", hook);
-    db[table].toArray().then(set);
+    db[table].hook("creating", hook)
+    db[table].hook("updating", hook)
+    db[table].hook("deleting", hook)
+    db[table].toArray().then(set)
 
     return () => {
-      db[table].hook("creating").unsubscribe(hook);
-      db[table].hook("updating").unsubscribe(hook);
-      db[table].hook("deleting").unsubscribe(hook);
-    };
-  });
+      db[table].hook("creating").unsubscribe(hook)
+      db[table].hook("updating").unsubscribe(hook)
+      db[table].hook("deleting").unsubscribe(hook)
+    }
+  })
 }
 
-export default db;
-export const cards = makeStore("card");
-export const lists = makeStore("list");
-export const directories = makeStore("directory");
+export default db
+export const cards = makeStore("card")
+export const lists = makeStore("list")
+export const directories = makeStore("directory")

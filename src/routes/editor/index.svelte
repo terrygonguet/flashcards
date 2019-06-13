@@ -2,11 +2,13 @@
   import { directories, lists, selectedList, selectedCard } from "../../stores";
   import db from "../../db";
   import { tick, onMount } from "svelte";
+  import ensureQuill from "./_ensureQuill";
 
   onMount(() => {
     // reset "parameter" stores
     $selectedCard = null;
     $selectedList = null;
+    ensureQuill();
   });
 
   $: tree = $directories.map(dir => ({

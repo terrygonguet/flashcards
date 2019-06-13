@@ -13,6 +13,7 @@
   nav ul {
     display: flex;
     flex-direction: row;
+    list-style-type: none;
   }
 
   a {
@@ -23,7 +24,7 @@
 </style>
 
 <header>
-  <a href="/">Flash Me</a>
+  <a href=".">Flash Me</a>
   <nav>
     <ul>
       <li>

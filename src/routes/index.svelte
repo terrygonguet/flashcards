@@ -52,6 +52,7 @@
 
   .listlist {
     margin: 0 0 1rem 2rem;
+    list-style-type: none;
   }
   .listlist li {
     margin: 0.25rem 0;
