@@ -96,9 +96,15 @@
   .list {
     display: flex;
     flex-direction: row;
+    margin: 0.2rem 0;
   }
   .listlabel {
     flex-grow: 1;
+  }
+  .listedit {
+    font-size: 1.2rem;
+    text-decoration: none;
+    margin: 0 0 0 0.2rem;
   }
 
   button {
@@ -142,7 +148,12 @@
             value={list.label}
             class="listlabel"
             id={'list' + list.id} />
-          <a href="editor/cards" on:click={e => ($selectedList = list)}>📝</a>
+          <a
+            href="editor/cards"
+            on:click={e => ($selectedList = list)}
+            class="listedit">
+            📝
+          </a>
         </span>
       {/each}
     </div>

@@ -3,6 +3,10 @@
 </script>
 
 <style>
+  figure {
+    font-size: 150%;
+  }
+
   img {
     width: 100%;
     border-radius: 0.25rem;
@@ -11,9 +15,9 @@
 
 <figure>
   {#if data.image}
-    <img src={data.image} alt={data.label} />
+    <img src={data.image} alt="image" />
   {/if}
   <figcaption>
-    <h1>{data.label}</h1>
+    {@html data.label}
   </figcaption>
 </figure>

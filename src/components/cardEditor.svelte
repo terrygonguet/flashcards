@@ -1,4 +1,5 @@
 <script>
+  import QuillEditor from "../components/quillEditor.svelte";
   import db from "../db";
   import { lists } from "../stores";
   export let card;
@@ -32,7 +33,7 @@
 <style>
   .container {
     display: grid;
-    grid-template-rows: minmax(auto, 40%) 1fr 1fr auto auto;
+    grid-template-rows: minmax(auto, 30vh) 1fr 1fr auto;
     position: relative;
     grid-gap: 0.5rem;
   }
@@ -60,10 +61,6 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-  }
-
-  textarea {
-    width: 100%;
   }
 
   .btncontainer {
@@ -112,14 +109,14 @@
       </label>
     </div>
   {/if}
-  <textarea
-    value={card.notion}
-    on:change={e => update('notion', e.target.value)}
-    placeholder="Notion" />
-  <textarea
-    value={card.explication}
-    on:change={e => update('explication', e.target.value)}
-    placeholder="Explication" />
+  <QuillEditor
+    placeholder="Notion"
+    content={card.notion}
+    on:change={e => update('notion', e.detail)} />
+  <QuillEditor
+    placeholder="Explication"
+    content={card.explication}
+    on:change={e => update('explication', e.detail)} />
   <div class="btncontainer">
     <a href="editor/cards" class="button delete" on:click={remove}>Supprimer</a>
     <a href="editor/cards" class="button">Confirmer</a>

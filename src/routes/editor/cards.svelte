@@ -66,8 +66,10 @@
       class:card={card.image}
       class:add={!card.image}>
       {#if card.image}
-        <img src={card.image} alt={card.notion} />
-      {:else}{card.notion}{/if}
+        <img src={card.image} alt="image" />
+      {:else}
+        {@html card.notion}
+      {/if}
     </a>
   {/each}
   <a href="editor/card" class="add" on:click={add}>Ajouter une carte</a>
