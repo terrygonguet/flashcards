@@ -14,7 +14,7 @@
 
   function add(e) {
     db.card
-      .add({ notion: "", explication: "", list: $selectedList.id })
+      .add({ notion: "", explication: "", level: 1, list: $selectedList.id })
       .then(id => {
         let card = $cards.find(c => c.id == id);
         $selectedCard = card;

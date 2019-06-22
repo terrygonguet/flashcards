@@ -4,3 +4,7 @@ SetEnvIfNoCase Request_URI "\.(?:gif|jpe?g|png)$" no-gzip
 <FilesMatch "\.(js|css)$">
 Header set Cache-Control "immutable"
 </FilesMatch>
+
+<FilesMatch "\.html$">
+Header set Cache-Control "public, stale-if-error=78000, stale-while-revalidate=78000, max-age=78000"
+</FilesMatch>

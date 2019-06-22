@@ -1,6 +1,7 @@
 <script>
   import { lists, directories, selectedLists, cards } from "../stores";
   import ToggleNotion from "../components/toggleNotion.svelte";
+  import SeriesLengthSelector from "../components/seriesLengthSelector.svelte";
   import { onMount } from "svelte";
 
   onMount(() => {
@@ -124,6 +125,7 @@
   {/each}
   <div class="separator" />
   <ToggleNotion />
+  <SeriesLengthSelector />
   <a href="learn" class:disabled={$selectedLists.length == 0} class="button">
     GO
   </a>

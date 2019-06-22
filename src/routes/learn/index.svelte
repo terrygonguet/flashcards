@@ -1,20 +1,38 @@
 <script>
-  import { selectedLists, cards, showNotion } from "../../stores";
+  import { selectedLists, cards, showNotion, seriesLength } from "../../stores";
   import Flashcard from "../../components/flashcard.svelte";
   import { goto } from "@sapper/app";
   import { onMount, tick } from "svelte";
+  import db from "../../db";
 
   onMount(() => {
     if (!$selectedLists.length) goto("/", { replaceState: true });
+    if (!series.length) goto("/", { replaceState: true }); // beurk deso
   });
 
   let i = 0;
   let displayCard = true;
-  let allCards;
-
-  $: allCards = $cards
+  let allCards = $cards
     .filter(c => $selectedLists.includes(c.list))
-    .sort(() => Math.random() - 0.5);
+    .flatMap(c => Array(clamp(1, Infinity, 8 - c.level)).fill(c));
+  let series;
+
+  if (!allCards.length) series = [];
+  // if only one card, only show one
+  else if (!allCards.some(c => c.id != allCards[0].id)) series = [allCards[0]];
+  else
+    series = Array($seriesLength)
+      .fill(0) // because JS
+      .reduce((acc, cur, i) => {
+        while (true) {
+          // scramble and prevent same card twice
+          let j = Math.floor(Math.random() * allCards.length);
+          let c = allCards[j];
+          if (!acc.length || acc[i - 1].id != c.id) return [...acc, c];
+          else continue;
+        }
+      }, []);
+
   // force flashcard destroy/create
   $: {
     i; // trigger when i changes
@@ -28,8 +46,16 @@
     }
   }
 
-  function next() {
-    i = (i + 1) % allCards.length;
+  function next(e) {
+    let card = series[i];
+    card.level = clamp(1, 8, (card.level || 1) + (e.detail ? 1 : -1));
+    db.card.update(card.id, { level: card.level });
+    if (i + 1 >= series.length) goto(".");
+    else i++;
+  }
+
+  function clamp(min, max, n) {
+    return n < min ? min : n > max ? max : n;
   }
 </script>
 
@@ -63,15 +89,15 @@
 </svelte:head>
 
 <div class="container">
-  {#if allCards.length}
+  {#if series.length}
     {#if displayCard}
       <Flashcard
-        card={allCards[i]}
+        card={series[i]}
         startOnNotion={$showNotion}
-        on:answer={e => next()} />
+        on:answer={next} />
     {/if}
   {:else}
-    <p>Pas de cartes sélectionnées</p>
+    <p>Chargement...</p>
   {/if}
   <a class="button" href=".">Retour</a>
 </div>
