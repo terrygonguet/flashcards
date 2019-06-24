@@ -55,14 +55,25 @@ export async function clearDirectory(dir, { removeCards = false } = {}) {
   await db.transaction("rw", db.directory, db.list, db.card, async () => {
     let listColl = db.list.where({ directory: dir.id })
     if (removeCards) {
-      let listArr = await listColl.toArray()
+      let listIds = (await listColl.toArray()).map(l => l.id)
       await db.card
         .where("list")
-        .anyOf(listArr.map(l => l.id))
+        .anyOf(listIds)
         .delete()
     }
     await listColl.delete()
     await db.directory.delete(dir.id)
+  })
+}
+
+export async function clearTrash() {
+  await db.transaction("rw", db.list, db.card, async () => {
+    let listIds = (await db.list.toArray()).map(l => l.id)
+    console.log("listIds :", listIds)
+    await db.card
+      .where("list")
+      .noneOf(listIds)
+      .delete()
   })
 }
 

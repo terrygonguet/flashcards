@@ -79,7 +79,7 @@
 <ul class="folderlist">
   {#each $directories as dir}
     <li>
-      <span>{dir.label}</span>
+      <span>{dir.label}{dir.owner ? '👑' : ''}</span>
       {#if dir.share}
         <span class="shareid">{dir.share}</span>
       {/if}

@@ -108,7 +108,7 @@
     margin: 0 0 0 0.2rem;
   }
 
-  button {
+  .button {
     margin: 1px;
     padding: 0.25rem;
   }
@@ -159,5 +159,11 @@
       {/each}
     </div>
   {/each}
+  <a
+    href="editor/cards"
+    class="button"
+    on:click={e => ($selectedList = 'trash')}>
+    Corbeille
+  </a>
   <button class="button" on:click={addDirectory}>Ajouter un dossier</button>
 </div>

@@ -1,6 +1,6 @@
 <script>
-  import { cards, selectedCard, selectedList } from "../../stores";
-  import db from "../../db";
+  import { lists, cards, selectedCard, selectedList } from "../../stores";
+  import db, { clearTrash } from "../../db";
   import { goto } from "@sapper/app";
   import { onMount } from "svelte";
 
@@ -8,9 +8,16 @@
     if (!$selectedList) goto("editor", { replaceState: true });
   });
 
-  $: cardsInList = $selectedList
-    ? $cards.filter(c => c.list == $selectedList.id)
-    : [];
+  let cardsInList = [];
+  $: {
+    if ($selectedList == "trash") {
+      cardsInList = cardsInList = $cards.filter(
+        c => !$lists.find(l => l.id == c.list)
+      );
+    } else if ($selectedList) {
+      cardsInList = $cards.filter(c => c.list == $selectedList.id);
+    } else cardsInList = [];
+  }
 
   function add(e) {
     db.card
@@ -18,8 +25,17 @@
       .then(id => {
         let card = $cards.find(c => c.id == id);
         $selectedCard = card;
-        goto(href);
+        goto("editor/card");
       });
+  }
+
+  function clear() {
+    if (
+      confirm(
+        "Ceci va supprimer définitivement toutes les cartes dans la corbeille"
+      )
+    )
+      clearTrash();
   }
 </script>
 
@@ -71,6 +87,12 @@
         {@html card.notion}
       {/if}
     </a>
+  {:else}
+    <a href="editor" class="add">Retour</a>
   {/each}
-  <a href="editor/card" class="add" on:click={add}>Ajouter une carte</a>
+  {#if $selectedList != 'trash'}
+    <a href="editor/card" class="add" on:click={add}>Ajouter une carte</a>
+  {:else}
+    <span class="add" on:click={clear}>Vider la corbeille</span>
+  {/if}
 </div>
