@@ -12,7 +12,7 @@
 
   main > :nth-child(2) {
     padding: 1rem;
-    flex-grow: 1;
+    /* flex-grow: 1; */
     position: relative;
   }
 </style>

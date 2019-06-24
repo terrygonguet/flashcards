@@ -5,13 +5,11 @@
 
 <style>
   .container {
-    height: 100%;
     width: 100%;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; */
     position: relative;
-    margin: auto;
   }
 
   .separator {
@@ -21,7 +19,7 @@
   @media (min-width: 768px) {
     .container {
       width: 30rem;
-      justify-content: center;
+      margin: auto;
     }
   }
 </style>

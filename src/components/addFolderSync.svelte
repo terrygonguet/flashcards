@@ -1,5 +1,5 @@
 <script>
-  import db from "../db";
+  import db, { addFromTree } from "../db";
 
   let shareID = "";
 
@@ -9,15 +9,11 @@
     try {
       let res = await fetch("share/" + shareID);
       let tree = await res.json();
+      tree.share = shareID;
 
-      await db.transaction("rw", db.directory, db.list, db.card, async () => {
-        let directory = await db.directory.add({ label: tree.label });
-        for (const l of tree.lists) {
-          let list = await db.list.add({ directory, label: l.label });
-          await Promise.all(l.cards.map(c => db.card.add({ ...c, list })));
-        }
-      });
+      await addFromTree(tree);
     } catch (err) {
+      console.error(err);
       shareID = "ID Invalide";
     }
   }

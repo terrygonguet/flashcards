@@ -1,6 +1,6 @@
 <script>
   import { directories, lists, selectedList, selectedCard } from "../../stores";
-  import db from "../../db";
+  import db, { clearDirectory } from "../../db";
   import { tick, onMount } from "svelte";
   import ensureQuill from "./_ensureQuill";
 
@@ -34,9 +34,8 @@
 
   async function handleKeydown(collection, obj, e) {
     if (!e.target.value && e.key == "Backspace") {
-      if (collection == "directory")
-        await db.list.where({ directory: obj.id }).delete();
-      await db[collection].delete(obj.id);
+      if (collection == "directory") await clearDirectory(obj);
+      else await db[collection].delete(obj.id);
       await tick();
       focusClosestTo(obj);
     } else if (e.key == "Enter") {

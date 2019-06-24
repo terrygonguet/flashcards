@@ -16,7 +16,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
   
   case 'POST':
     $data = file_get_contents('php://input');
-    $rnd = generateRandomString(15);
+    
+    if (isset($_GET["id"])) $rnd = $_GET["id"];
+    else $rnd = generateRandomString(15);
+
     file_put_contents("./$rnd", $data);
     header("Content-Type: application/json");
     echo("{ \"id\": \"$rnd\" }");

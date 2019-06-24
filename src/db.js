@@ -37,6 +37,35 @@ function makeStore(table) {
   })
 }
 
+export async function addFromTree(tree) {
+  await db.transaction("rw", db.directory, db.list, db.card, async () => {
+    let directory = await db.directory.add({
+      label: tree.label,
+      share: tree.share,
+      owner: false,
+    })
+    for (const l of tree.lists) {
+      let list = await db.list.add({ directory, label: l.label })
+      await Promise.all(l.cards.map(c => db.card.add({ ...c, list })))
+    }
+  })
+}
+
+export async function clearDirectory(dir, { removeCards = false } = {}) {
+  await db.transaction("rw", db.directory, db.list, db.card, async () => {
+    let listColl = db.list.where({ directory: dir.id })
+    if (removeCards) {
+      let listArr = await listColl.toArray()
+      await db.card
+        .where("list")
+        .anyOf(listArr.map(l => l.id))
+        .delete()
+    }
+    await listColl.delete()
+    await db.directory.delete(dir.id)
+  })
+}
+
 export default db
 export const cards = makeStore("card")
 export const lists = makeStore("list")

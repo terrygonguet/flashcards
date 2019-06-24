@@ -1,6 +1,11 @@
 <script>
   import { directories, lists, cards } from "../stores";
-  import db from "../db";
+  import db, { clearDirectory, addFromTree } from "../db";
+
+  function handleClick(dir) {
+    if (!dir.share || dir.owner) share(dir);
+    else sync(dir);
+  }
 
   async function share(dir) {
     let _lists = $lists
@@ -17,20 +22,34 @@
     };
 
     try {
-      let body = new Blob([JSON.stringify(tree)], { type: "application/json" });
-      let res = await fetch("share/", { method: "POST", body });
+      let query = dir.share ? `?id=${dir.share}` : "";
+      let owner = dir.owner || !dir.share;
+      let body = new Blob([JSON.stringify(tree, null, 2)], {
+        type: "application/json"
+      });
+      let res = await fetch(`share/${query}`, { method: "POST", body });
       let json = await res.json();
 
-      await db.directory.update(dir.id, { share: json.id });
+      await db.directory.update(dir.id, { share: json.id, owner });
       await navigator.clipboard.writeText(json.id);
     } catch (err) {
       console.error(err);
     }
   }
 
-  function selectID(e) {
-    let range = document.createRange();
-    range.selectNode(e.target);
+  async function sync(dir) {
+    try {
+      let res = await fetch(`share/${dir.share}`);
+      let tree = await res.json();
+      tree.share = dir.share;
+
+      await db.transaction("rw", db.directory, db.list, db.card, async () => {
+        await clearDirectory(dir);
+        await addFromTree(tree);
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 </script>
 
@@ -62,9 +81,9 @@
     <li>
       <span>{dir.label}</span>
       {#if dir.share}
-        <span on:click={selectID} class="shareid">{dir.share}</span>
+        <span class="shareid">{dir.share}</span>
       {/if}
-      <button class="button" on:click={e => share(dir)}>
+      <button class="button" on:click={e => handleClick(dir)}>
          {dir.share ? 'Syncroniser' : 'Partager'}
       </button>
     </li>
