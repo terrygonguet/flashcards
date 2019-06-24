@@ -31,6 +31,9 @@
         <a href="editor">Éditeur</a>
       </li>
       <li>
+        <a href="sync">Sync</a>
+      </li>
+      <li>
         <a href="about">About</a>
       </li>
     </ul>

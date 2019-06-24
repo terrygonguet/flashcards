@@ -48,7 +48,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center;  */
   }
 
   .listlist {
@@ -121,7 +121,7 @@
       {/each}
     </ul>
   {:else}
-    <p>Pas de dossier</p>
+    <p>Chargement...</p>
   {/each}
   <div class="separator" />
   <ToggleNotion />
