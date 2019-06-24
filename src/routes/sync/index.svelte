@@ -11,6 +11,7 @@
 
   .separator {
     margin: 1rem;
+    text-align: center;
   }
 
   @media (min-width: 768px) {

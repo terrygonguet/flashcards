@@ -45,9 +45,9 @@
 <style>
   .container {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    /* justify-content: center;  */
   }
 
   .listlist {
@@ -84,6 +84,7 @@
       width: 30rem;
       position: relative;
       margin: auto;
+      height: initial;
     }
     .separator {
       margin: 0;

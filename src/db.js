@@ -69,7 +69,6 @@ export async function clearDirectory(dir, { removeCards = false } = {}) {
 export async function clearTrash() {
   await db.transaction("rw", db.list, db.card, async () => {
     let listIds = (await db.list.toArray()).map(l => l.id)
-    console.log("listIds :", listIds)
     await db.card
       .where("list")
       .noneOf(listIds)
