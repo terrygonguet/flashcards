@@ -6,8 +6,8 @@
   import db from "../../db";
 
   onMount(() => {
-    if (!$selectedLists.length) goto("/", { replaceState: true });
-    if (!series.length) goto("/", { replaceState: true }); // beurk deso
+    if (!$selectedLists.length) goto(".", { replaceState: true });
+    if (!series.length) goto(".", { replaceState: true }); // beurk deso
   });
 
   let i = 0;
